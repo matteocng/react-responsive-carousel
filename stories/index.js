@@ -7,11 +7,27 @@ import '../src/main.scss';
 import '../src/carousel.scss';
 import '../src/examples/presentation/presentation.scss';
 
+// User provided example styles file, it will be imported as a CSS Module by
+// Webpack/your module bundler. It could also be a '.scss' file or another format
+// supported by Webpack/your module bundler. We then pass `cssModule` as `cssModule`
+// to the Carousel component.
+// SEE: './.storybook/webpack.config.js'
+// SEE: https://github.com/css-modules/css-modules
+import cssModule from "../src/examples/custom-carousel-styles.module.css";
+
+const globalOrCssModuleClassName = (cssModule, className) => {
+  if (!cssModule) return className;
+
+  return cssModule[className] || className;
+}
+
 const createCarouselItemImage = (index, options = {}) => (
-    <div key={index}>
-        <img src={`/assets/${index}.jpeg`} />
-        <p className="legend">Legend {index}</p>
-    </div>
+  <div key={index}>
+    <img src={`/assets/${index}.jpeg`} />
+    <p className={globalOrCssModuleClassName(options.cssModule, "legend")}>
+      Legend {index}
+    </p>
+  </div>
 );
 
 const addChildren = (ammount = 1, options = {}) => {
@@ -25,6 +41,12 @@ const addChildren = (ammount = 1, options = {}) => {
 };
 
 const baseChildren = <div>{ [1,2,3,4,5].map(createCarouselItemImage) }</div>;
+
+const baseChildrenCssModule = (
+  <div>
+    {[1, 2, 3, 4, 5].map(idx => createCarouselItemImage(idx, { cssModule }))}
+  </div>
+);
 
 export class LazyLoadedCarousel extends Component {
     constructor (props) {
@@ -369,4 +391,20 @@ storiesOf('Carousel')
     <Carousel centerMode centerSlidePercentage={50} emulateTouch>
         { baseChildren.props.children }
     </Carousel>
-  ), { source: true, inline: true, propTables: false});
+  ), { source: true, inline: true, propTables: false})
+  .addWithInfo(
+    "with CSS Modules",
+    `
+      ~~~js
+      A CSS Module is a CSS file in which all class names and animation names are scoped locally by default.
+
+      See the documentation: https://github.com/css-modules/css-modules
+      ~~~
+    `,
+  () => (
+    <Carousel cssModule={cssModule}>
+      {baseChildrenCssModule.props.children}
+    </Carousel>
+  ),
+  { source: true, inline: true, propTables: false }
+);

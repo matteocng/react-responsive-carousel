@@ -1,0 +1,194 @@
+/*
+ *
+ * This is an example CSS file with a .module.css extension, so that you can
+ * easily configure your Webpack/your module loader to import it as a CSS module.
+ * The react-responsive-carousel module will replace global classNames with classNames
+ * in this file. If a className used by react-responsive-carouse is not defined
+ * here, it will be assigned to DOM elements as usual and related global CSS rules
+ * and styles will apply.
+ *
+*/
+.slider {
+  /*
+   * We keep the global className here since we don't want to rewrite that CSS.
+   * Warning: global CSS, possible name collisions.
+  */
+  composes: slider from global;
+
+  /*
+   * The following CSS declaration will be added to a locally scoped className.
+   * Such className will be assigned by the component to every DOM element that
+   * also has the the global className `.slider`.
+  */
+  will-change: transform;
+}
+
+.control-arrow {
+  /*
+   * The `control-arrow` (global CSS) className will not be printed in the HTML.
+   * We have to write our own CSS.
+  */
+  transition: all 0.25s ease-in;
+  opacity: 0.4;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border: 0;
+  font-size: 32px;
+  cursor: pointer;
+
+  &:before {
+    margin: 0 16px;
+    display: inline-block;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    content: "";
+  }
+
+  &:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  &.control-disabled {
+    opacity: 0;
+    cursor: inherit;
+    display: none;
+  }
+
+  &.control-prev {
+    left: 0;
+
+    &:before {
+      border-right: 16px solid #fff;
+    }
+  }
+
+  &.control-next {
+    right: 0;
+
+    &:before {
+      border-left: 16px solid #fff;
+    }
+  }
+}
+
+.dot {
+  /*
+   * The `dot` (global CSS) className will not be printed in the HTML.
+   * We have to write our own CSS.
+  */
+  transition: opacity 0.25s ease-in;
+  opacity: 0.3;
+  box-shadow: 1px 1px 2px rgba(#000, 0.9);
+  background: #dcdcdc;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 8px;
+  width: 16px;
+  height: 16px;
+
+  @media (min-width: 767px) {
+    width: 32px;
+    height: 32px;
+  }
+
+  &.selected,
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.thumbs-wrapper {
+  /*
+   * The `thumbs-wrapper` (global CSS) className will not be printed in the HTML.
+   * We have to write our own CSS.
+  */
+  background: #dcdcdc;
+  padding: 10px;
+
+  @media (min-width: 767px) {
+    padding: 20px;
+  }
+}
+
+.thumbs {
+  /*
+   * The `thumbs` (global CSS) className will not be printed in the HTML.
+   * We have to write our own CSS.
+  */
+  transition: all 0.15s ease-in;
+  transform: translate3d(0, 0, 0);
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thumb {
+  /*
+   * The `thumb` (global CSS) className will not be printed in the HTML.
+   * We have to write our own CSS.
+  */
+  transition: border 0.15s ease-in;
+  display: inline-block;
+  width: 160px;
+  margin-right: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 2px;
+
+  &:hover,
+  &.selected {
+    border: 3px solid black;
+  }
+
+  img {
+    vertical-align: top;
+  }
+}
+
+.carousel {
+  /*
+   * We keep the global className here since we don't want to rewrite that CSS.
+   * Warning: global CSS, possible name collisions.
+  */
+  composes: carousel from global;
+
+  &:hover {
+    .control-arrow {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.7);
+    }
+  }
+}
+
+.legend {
+  /*
+   * The `legend` (global CSS) className will not be printed in the HTML.
+   * We have to write our own CSS.
+  */
+  visibility: hidden;
+  position: absolute;
+  bottom: 60px;
+  left: 60%;
+  margin-left: -50%;
+  width: 80%;
+  border-radius: 5px;
+  background: rgba(220, 220, 220, 0.4);
+  font-weight: bold;
+  color: #fff;
+  padding: 8px;
+  font-size: 20px;
+  text-transform: capitalize;
+  text-align: center;
+
+  @media (min-width: 577px) {
+    visibility: visible;
+  }
+}
