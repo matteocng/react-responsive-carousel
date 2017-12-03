@@ -4,6 +4,9 @@ import { shallow, mount } from 'enzyme';
 import renderer from 'react-test-renderer';
 import * as index from '../index';
 import Swipe from 'react-easy-swipe';
+import cssClasses from '../cssClasses';
+import cssModuleAll from './custom-carousel-styles.css'; // Mocked by Jest.
+import cssModuleControls from './custom-carousel-styles-controls.css'; // Mocked by Jest.
 
 describe("Slider", function() {
 	jest.autoMockOff();
@@ -748,6 +751,20 @@ describe("Slider", function() {
                 centerMode: true
             }, baseChildren)).toMatchSnapshot();
         });
+
+	describe("CSS modules", () => {
+	  it("should replace all global classNames with locally scoped classNames", () => {
+	    expect(
+	      renderForSnapshot({ cssModule: cssModuleAll }, baseChildren)
+	    ).toMatchSnapshot();
+	  });
+
+	  it("should replace all global classNames starting with 'control-' with locally scoped classNames", () => {
+	    expect(
+	      renderForSnapshot({ cssModule: cssModuleControls }, baseChildren)
+	    ).toMatchSnapshot();
+	  });
+	});
     });
 
 	jest.autoMockOn();
