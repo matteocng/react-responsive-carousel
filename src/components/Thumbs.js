@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import klass from '../cssClasses';
 import { outerWidth } from '../dimensions';
 import CSSTranslate from '../CSSTranslate';
 import Swipe from 'react-easy-swipe';
@@ -14,7 +13,7 @@ class Thumbs extends Component {
         transitionTime: PropTypes.number,
         selectedItem: PropTypes.number,
         thumbWidth: PropTypes.number,
-        cssModule: PropTypes.object,
+        klass: PropTypes.object,
     };
 
     static defaultProps = {
@@ -234,7 +233,7 @@ class Thumbs extends Component {
 
     renderItems () {
         return this.state.images.map((img, index) => {
-            const itemClass = klass.ITEM(this.props.cssModule, false, index === this.state.selectedItem && this.state.hasMount);
+            const itemClass = this.props.klass.ITEM(false, index === this.state.selectedItem && this.state.hasMount);
 
             const thumbProps = {
                 key: index,
@@ -290,15 +289,15 @@ class Thumbs extends Component {
                'msTransitionDuration': transitionTime
         };
 
-        const cssModule = this.props.cssModule;
+        const klass = this.props.klass;
 
         return (
-            <div className={klass.CAROUSEL(cssModule, false)}>
-                <div className={klass.WRAPPER(cssModule, false)} ref={node => this.itemsWrapper = node}>
-                    <button type="button" className={klass.ARROW_PREV(cssModule, !hasPrev)} onClick={this.slideRight} />
+            <div className={klass.CAROUSEL(false)}>
+                <div className={klass.WRAPPER(false)} ref={node => this.itemsWrapper = node}>
+                    <button type="button" className={klass.ARROW_PREV(!hasPrev)} onClick={this.slideRight} />
                     <Swipe tagName="ul"
                         selectedItem={this.state.selectedItem}
-                        className={klass.SLIDER(cssModule, false, this.state.swiping)}
+                        className={klass.SLIDER(false, this.state.swiping)}
                         onSwipeLeft={this.slideLeft}
                         onSwipeRight={this.slideRight}
                         onSwipeMove={this.onSwipeMove}
@@ -308,7 +307,7 @@ class Thumbs extends Component {
                         ref={node => this.itemList = node}>
                         { this.renderItems() }
                     </Swipe>
-                    <button type="button" className={klass.ARROW_NEXT(cssModule, !hasNext)} onClick={this.slideLeft} />
+                    <button type="button" className={klass.ARROW_NEXT(!hasNext)} onClick={this.slideLeft} />
                 </div>
             </div>
         );

@@ -9,55 +9,57 @@ const mapToCssModules = (className, cssModule) => {
     .join(" ");
 };
 
-const classNamesWithCssModule = (className, cssModule) =>
-  mapToCssModules(classNames(className), cssModule);
+export default (cssModule) => {
+  const classNamesWithCssModule = (className) =>
+    mapToCssModules(classNames(className), cssModule);
 
-export default {
-    CAROUSEL: (cssModule, isSlider) => classNamesWithCssModule({
+  return {
+    CAROUSEL: (isSlider) => classNamesWithCssModule({
         "carousel": true,
         "carousel-slider": isSlider
-    }, cssModule),
+    }),
 
-    CAROUSEL_STATUS: (cssModule) => classNamesWithCssModule({
+    CAROUSEL_STATUS: () => classNamesWithCssModule({
         "carousel-status": true,
-    }, cssModule),
+    }),
 
-    WRAPPER: (cssModule, isSlider, axis) => classNamesWithCssModule({
+    WRAPPER: (isSlider, axis) => classNamesWithCssModule({
         "thumbs-wrapper": !isSlider,
         "slider-wrapper": isSlider,
         "axis-horizontal": axis === "horizontal",
         "axis-vertical": axis !== "horizontal"
-    }, cssModule),
+    }),
 
-    SLIDER: (cssModule, isSlider, isSwiping) => classNamesWithCssModule({
+    SLIDER: (isSlider, isSwiping) => classNamesWithCssModule({
         "thumbs": !isSlider,
         "slider": isSlider,
         "animated": !isSwiping
-    }, cssModule),
+    }),
 
-    ITEM: (cssModule, isSlider, selected) => classNamesWithCssModule({
+    ITEM: (isSlider, selected) => classNamesWithCssModule({
         "thumb": !isSlider,
         "slide": isSlider,
         "selected": selected
-    }, cssModule),
+    }),
 
-    ARROW_PREV: (cssModule, disabled) => classNamesWithCssModule({
+    ARROW_PREV: (disabled) => classNamesWithCssModule({
         "control-arrow control-prev": true,
         "control-disabled": disabled
-    }, cssModule),
+    }),
 
-    ARROW_NEXT: (cssModule, disabled) => classNamesWithCssModule({
+    ARROW_NEXT: (disabled) => classNamesWithCssModule({
         "control-arrow control-next": true,
         "control-disabled": disabled
-    }, cssModule),
+    }),
 
 
-    DOT: (cssModule, selected) => classNamesWithCssModule({
+    DOT: (selected) => classNamesWithCssModule({
         "dot": true,
         'selected': selected
-    }, cssModule),
+    }),
 
-    CONTROL_DOTS: (cssModule) => classNamesWithCssModule({
+    CONTROL_DOTS: () => classNamesWithCssModule({
         "control-dots": true,
-    }, cssModule),
-};
+    }),
+  };
+}

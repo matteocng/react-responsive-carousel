@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import klass from '../cssClasses';
+import klassFactory from '../cssClasses';
 import CSSTranslate from '../CSSTranslate';
 import Swipe from 'react-easy-swipe';
 import Thumbs from './Thumbs';
@@ -79,6 +79,8 @@ class Carousel extends Component {
             hasMount: false,
             isMouseEntered: false
         };
+
+        this.klass = klassFactory(props.cssModule);
     }
 
     componentDidMount () {
@@ -455,12 +457,14 @@ class Carousel extends Component {
     }
 
     renderItems () {
+        const klass = this.klass;
+
         return React.Children.map(this.props.children, (item, index) => {
-            const itemClass = klass.ITEM(this.props.cssModule, true, index === this.state.selectedItem);
+            const itemClass = klass.ITEM(true, index === this.state.selectedItem);
             const slideProps = {
                 ref: 'item' + index,
                 key: 'itemKey' + index,
-                className: klass.ITEM(this.props.cssModule, true, index === this.state.selectedItem),
+                className: klass.ITEM(true, index === this.state.selectedItem),
                 onClick: this.handleClickItem.bind(this, index, item)
             };
 
@@ -483,10 +487,12 @@ class Carousel extends Component {
             return null
         }
 
+        const klass = this.klass;
+
         return (
             <ul className={klass.CONTROL_DOTS(this.props.cssModule)}>
                 {React.Children.map(this.props.children, (item, index) => {
-                    return <li className={klass.DOT(this.props.cssModule, index === this.state.selectedItem)} onClick={this.changeItem} value={index} key={index} />;
+                    return <li className={klass.DOT(index === this.state.selectedItem)} onClick={this.changeItem} value={index} key={index} />;
                 })}
             </ul>
         );
@@ -497,7 +503,7 @@ class Carousel extends Component {
             return null
         }
 
-        return <p className={klass.CAROUSEL_STATUS(this.props.cssModule)}>{this.props.statusFormatter(this.state.selectedItem + 1, this.props.children.length)}</p>;
+        return <p className={this.klass.CAROUSEL_STATUS(this.props.cssModule)}>{this.props.statusFormatter(this.state.selectedItem + 1, this.props.children.length)}</p>;
     }
 
     renderThumbs () {
@@ -506,7 +512,7 @@ class Carousel extends Component {
         }
 
         return (
-            <Thumbs onSelectItem={this.handleClickThumb} selectedItem={this.state.selectedItem} transitionTime={this.props.transitionTime} thumbWidth={this.props.thumbWidth} cssModule={this.props.cssModule}>
+            <Thumbs onSelectItem={this.handleClickThumb} selectedItem={this.state.selectedItem} transitionTime={this.props.transitionTime} thumbWidth={this.props.thumbWidth} klass={this.klass}>
                 {this.props.children}
             </Thumbs>
         );
@@ -537,6 +543,8 @@ class Carousel extends Component {
 
         const transitionTime = this.props.transitionTime + 'ms';
 
+        const klass = this.klass;
+
         itemListStyles = {
                     'WebkitTransform': transformProp,
                        'MozTransform': transformProp,
@@ -560,7 +568,7 @@ class Carousel extends Component {
 
         let swiperProps = {
             selectedItem: this.state.selectedItem,
-            className: klass.SLIDER(this.props.cssModule, true, this.state.swiping),
+            className: klass.SLIDER(true, this.state.swiping),
             onSwipeMove: this.onSwipeMove,
             onSwipeStart: this.onSwipeStart,
             onSwipeEnd: this.onSwipeEnd,
@@ -588,18 +596,16 @@ class Carousel extends Component {
             containerStyles.height = this.state.itemSize;
         }
 
-        const cssModule = this.props.cssModule;
-
         return (
             <div className={this.props.className} ref="carouselWrapper">
-                <div className={klass.CAROUSEL(cssModule, true)} style={{width: this.props.width}}>
-                    <button type="button" className={klass.ARROW_PREV(cssModule, !hasPrev)} onClick={this.decrement} />
-                    <div className={klass.WRAPPER(cssModule, true, this.props.axis)} style={containerStyles} ref="itemsWrapper">
+                <div className={klass.CAROUSEL(true)} style={{width: this.props.width}}>
+                    <button type="button" className={klass.ARROW_PREV(!hasPrev)} onClick={this.decrement} />
+                    <div className={klass.WRAPPER(true, this.props.axis)} style={containerStyles} ref="itemsWrapper">
                         <Swipe tagName="ul" {...swiperProps} allowMouseEvents={this.props.emulateTouch}>
                             { this.renderItems() }
                         </Swipe>
                     </div>
-                    <button type="button" className={klass.ARROW_NEXT(cssModule, !hasNext)} onClick={this.increment} />
+                    <button type="button" className={klass.ARROW_NEXT(!hasNext)} onClick={this.increment} />
 
                     { this.renderControls() }
                     { this.renderStatus() }
